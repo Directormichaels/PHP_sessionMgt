@@ -14,14 +14,24 @@ function registerUser($username, $email, $password){
 
     $user_data = [$username, $email, $password];
     
-    $file = fopen($filename, 'a');
-    fputcsv($file, $user_data);
+    $file = fopen($filename, 'ra+');
+    while (!feof($file)) {
+        $data = fgetcsv($file);
+        if ($data[0] == $username || $data[1] == $email) {
+            echo "User Already Exists";
+            exit;
+        } else {
+            fputcsv($file, $user_data);
+            echo '<meta http-equiv="refresh" content="1; url=../forms/login.html">';
+            echo "<center><h1><strong>User Successfully registered</strong></h1></center>";
+
+        }
+        
+    }
+   
     fclose($file);
     
     // echo "OKAY";
-    echo '<meta http-equiv="refresh" content="1; url=../forms/login.html">';
-    echo "<center><h1><strong>User Successfully registered</strong></h1></center>";    
-    #header("Location: login.php");
 }
 #echo "HANDLE THIS PAGE";
 
